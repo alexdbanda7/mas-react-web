@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useDrag } from "@use-gesture/react";
 
 import masLogo from "../maslogo.png";
@@ -15,20 +15,23 @@ import iboutImage1 from "../assets/iboutImage1.jpg";
 import iboutImage2 from "../assets/iboutImage2.png";
 import iboutImage3 from "../assets/iboutImage3.png";
 import iboutImage4 from "../assets/iboutImage4.png";
+import badge1 from "../assets/badge1.png";
+import badge2 from "../assets/badge2.png";
+import badge3 from "../assets/badge3.png";
 import brochure from "../assets/MAS-Business-Profile.pdf";
+
 import LatestProjects from "../components/LatestProjects";
 import Testimonials from "../components/Testimonials";
 
-// Reusable heading component
+/* ---------------- SECTION HEADING ---------------- */
 function SectionHeading({ children }) {
   return (
-    <div className="relative flex items-center justify-center my-12">
+    <div className="relative flex items-center justify-center my-14">
       <hr className="border-gray-300 w-1/4" />
       <div className="flex space-x-2 mx-4">
-        <span className="w-3 h-3 rounded-full bg-blue-900"></span>
-        <span className="w-3 h-3 rounded-full bg-blue-900"></span>
-        <span className="w-3 h-3 rounded-full bg-blue-900"></span>
-        <span className="w-3 h-3 rounded-full bg-blue-900"></span>
+        {[...Array(4)].map((_, i) => (
+          <span key={i} className="w-3 h-3 rounded-full bg-blue-900" />
+        ))}
       </div>
       <h2 className="absolute bg-white px-4 text-xl md:text-3xl font-bold text-blue-900">
         {children}
@@ -38,124 +41,123 @@ function SectionHeading({ children }) {
   );
 }
 
-// Star Rating Component
-
+/* ---------------- HOME ---------------- */
 export default function Home() {
   const navigate = useNavigate();
-  const scrollRef = useRef();
-  const animationRef = useRef();
-  const [isHovering] = useState(false);
-  const [, setTestimonialIndex] = useState(0);
 
-  const handleBrochureClick = () => {
-    if (window.gtag) {
-      window.gtag("event", "brochure_download", {
-        event_category: "Engagement",
-        event_label: "MAS Business Profile",
-      });
-    }
-  };
-
-  const whyChooseUs = [
-    { title: "Quality Assurance", text: "Top-tier quality in every product and service we deliver." },
-    { title: "Creative Expertise", text: "Our skilled designers bring your vision to life with innovation." },
-    { title: "Customer Focus", text: "Your satisfaction is our priority at every step." },
-    { title: "Timely Delivery", text: "We meet deadlines reliably and consistently." },
-    { title: "Competitive Pricing", text: "Best value without compromising on quality." },
+  /* -------- ABOUT US CAROUSEL -------- */
+  const aboutImages = [
+    { src: iboutImage, alt: "MAS Team at office" },
+    { src: iboutImage1, alt: "MAS team working on projects" },
+    { src: iboutImage2, alt: "Creative design workflow" },
+    { src: iboutImage3, alt: "Printing and branding setup" },
+    { src: iboutImage4, alt: "Satisfied clients and staff" },
   ];
 
+  const [slide, setSlide] = useState(0);
+  const [showMore, setShowMore] = useState(false);
+
+  /* Auto-slide every 5s */
+  useEffect(() => {
+    const timer = setInterval(
+      () => setSlide((prev) => (prev + 1) % aboutImages.length),
+      5000
+    );
+    return () => clearInterval(timer);
+  }, [aboutImages.length]);
+
+  /* Swipe gesture */
+  const bind = useDrag(({ swipe: [swipeX] }) => {
+    if (swipeX === -1) setSlide((s) => (s + 1) % aboutImages.length);
+    if (swipeX === 1) setSlide((s) => (s === 0 ? aboutImages.length - 1 : s - 1));
+  });
+
+  /* -------- HERO DATA -------- */
+  const latestProjects = [
+    {
+      title: "Nyaso Foundation Branding",
+      img: projectOneImg,
+      description: "Branding and identity design completed in 2024.",
+    },
+    {
+      title: "Posiye Gardens Logo",
+      img: projectTwoImg,
+      description: "Creative logo design project in 2024.",
+    },
+    {
+      title: "Repose Healthcare UK",
+      img: projectThreeImg,
+      description: "High-quality printing solution delivered in 2025.",
+    },
+  ];
+
+  const testimonials = [
+    {
+      name: "Jeremy Namwali",
+      feedback: "MAS delivered exactly what we needed. Professional and creative!",
+      img: iboutImage,
+    },
+    {
+      name: "Pauren Nyasoko",
+      feedback: "Their printing and branding exceeded our expectations.",
+      img: iboutImage1,
+    },
+    {
+      name: "Mr Mwale",
+      feedback: "Great customer service and attention to detail.",
+      img: iboutImage2,
+    },
+    {
+      name: "Anna Chirwa",
+      feedback: "Outstanding quality and timely delivery.",
+      img: iboutImage3,
+    },
+    {
+      name: "James Banda",
+      feedback: "Highly recommend MAS for creative services.",
+      img: iboutImage4,
+    },
+  ];
+
+  /* -------- MISSION / VISION DATA -------- */
   const missionAndVision = [
     {
       title: "Mission Statement",
       img: missionImg,
       description:
-        "To provide reliable, high-quality business solutions through stationery, ICT support, ICT equipment, electronics, and creative branding and printing services that empower our clients to operate efficiently and grow sustainably.",
+        "To provide reliable, high-quality business solutions through stationery, ICT support, ICT equipment, electronics, and creative branding and printing services.",
     },
     {
       title: "Vision Statement",
       img: visionImg,
       description:
-        "To be the leading and trusted one-stop provider of business, technology, and creative solutions in Malawi and beyond, recognized for excellence, innovation, and professionalism.",
+        "To be the leading and trusted one-stop provider of business and creative solutions in Malawi and beyond.",
     },
     {
       title: "Core Values",
       img: valuesImg,
       description:
-        "Driven by creativity, Quality, Integrity, and Customer satisfaction, Mas Art & General Supplies delivers professional design and general supply solutions with a positive community impact.",
+        "Creativity, Quality, Integrity, and Customer Satisfaction guide everything we do.",
     },
   ];
 
-  const latestProjects = [
-    { title: "Nyaso Foundation Branding", img: projectOneImg, description: "Branding and identity design completed in 2024." },
-    { title: "Posiye Gardens Logo", img: projectTwoImg, description: "Creative logo design project in 2024." },
-    { title: "Repose Healthcare UK", img: projectThreeImg, description: "High-quality printing solution delivered in 2025." },
+  const whyChooseUs = [
+    { title: "Quality Assurance", text: "Top-tier quality guaranteed." },
+    { title: "Creative Expertise", text: "Innovative and modern designs." },
+    { title: "Customer Focus", text: "Your satisfaction comes first." },
+    { title: "Timely Delivery", text: "We meet deadlines consistently." },
+    { title: "Competitive Pricing", text: "Best value for your budget." },
   ];
 
-  const testimonials = [
-    { name: "Jeremy Namwali", feedback: "MAS delivered exactly what we needed. Professional and creative!", img: iboutImage },
-    { name: "Pauren Nyasoko", feedback: "Their printing and branding exceeded our expectations.", img: iboutImage1 },
-    { name: "Mr Mwale", feedback: "Great customer service and attention to detail.", img: iboutImage2 },
-    { name: "Anna Chirwa", feedback: "Outstanding quality and timely delivery.", img: iboutImage3 },
-    { name: "James Banda", feedback: "Highly recommend MAS for creative services.", img: iboutImage4 },
+  const certificationBadges = [
+    { src: badge1, alt: "ISO Certified" },
+    { src: badge2, alt: "Malawi Business Registration" },
+    { src: badge3, alt: "Quality Assurance Award" },
   ];
-
-  // About Us carousel setup
-  const aboutImages = [iboutImage, iboutImage1, iboutImage2, iboutImage3, iboutImage4];
-  const [slide, setSlide] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setSlide(prev => (prev + 1) % aboutImages.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [aboutImages.length]);
-
-  const bind = useDrag(({ swipe: [swipeX] }) => {
-    if (swipeX === -1) nextSlide();
-    else if (swipeX === 1) prevSlide();
-  });
-
-  const nextSlide = () =>
-    setSlide((prev) => (prev + 1) % aboutImages.length);
-  const prevSlide = () =>
-    setSlide((prev) => (prev === 0 ? aboutImages.length - 1 : prev - 1));
-
-  // Auto-scroll testimonials with pause on hover
-  useEffect(() => {
-    const container = scrollRef.current;
-    const speed = 0.5;
-    let x = 0;
-    const width = container.scrollWidth / 2;
-
-    const animate = () => {
-      if (!isHovering) {
-        x -= speed;
-        if (x <= -width) x = 0;
-
-        container.style.transform = `translateX(${x}px)`;
-        const itemWidth = container.scrollWidth / (testimonials.length * 2);
-        const currentIndex = Math.floor(-x / itemWidth) % testimonials.length;
-        setTestimonialIndex(currentIndex);
-      }
-      animationRef.current = requestAnimationFrame(animate);
-    };
-    animate();
-
-    return () => cancelAnimationFrame(animationRef.current);
-  }, [isHovering, testimonials.length]);
-
-  // Touch drag for mobile
-  useDrag(
-    ({ movement: [mx], memo = 0 }) => {
-      scrollRef.current.style.transform = `translateX(${memo + mx}px)`;
-      return memo + mx;
-    },
-    { target: scrollRef, axis: "x", pointer: { touch: true } }
-  );
 
   return (
     <div className="w-full max-w-6xl mx-auto px-4 md:px-6">
-      {/* Hero Section */}
+      {/* ---------------- HERO ---------------- */}
       <motion.section
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -164,147 +166,183 @@ export default function Home() {
       >
         <img
           src={masLogo}
-          alt="MAS Logo"
-          className="w-56 md:w-80 h-auto mb-6 md:mb-0 md:mr-12 object-contain drop-shadow-md"
+          alt="MAS Art & General Supplies Logo"
+          className="w-56 md:w-80 mb-6 md:mr-12"
         />
-        <div className="bg-white bg-opacity-90 p-6 rounded-lg shadow-xl max-w-2xl">
+
+        <div className="bg-white p-6 rounded-lg shadow-xl max-w-2xl">
           <h1 className="text-4xl text-center font-bold mb-4 text-blue-900">
             MAS Art & General Supplies
           </h1>
-          <p className="text-lg text-center md:text-xl text-gray-700 leading-relaxed">
-            We provide comprehensive end-to-end business solutions including stationery and office supplies, ICT support services, ICT equipment and electronics including laptops, printing, branding, advertising, and graphic design.
+
+          <p className="text-lg text-center text-gray-700">
+            We provide comprehensive end-to-end business solutions including stationery and office supplies, ICT support services, ICT equipment and electronics including laptops, printing, branding, advertising, and graphic design. Our commitment to quality, reliability, and professionalism ensures your business is equipped for success.
           </p>
 
           <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              onClick={() => navigate("/services")}
-              className="px-7 py-3 bg-blue-900 text-white rounded-lg shadow-lg hover:bg-blue-800 transition transform hover:scale-105"
-            >
-              View Services
-            </button>
+          <button
+            onClick={() => navigate("/services")}
+            className="px-5 sm:px-7 py-2 sm:py-3 bg-blue-900 text-white rounded-lg shadow-lg hover:bg-blue-800 transition transform hover:scale-105 text-sm sm:text-base"
+          >
+            View Services
+          </button>
 
-            <a
-              href={brochure}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={handleBrochureClick}
-              className="px-7 py-3 border-2 border-blue-900 text-blue-900 rounded-lg shadow-lg hover:bg-blue-900 hover:text-white transition transform hover:scale-105 text-center"
-            >
-              View Company Profile
-            </a>
-          </div>
+          <a
+            href={brochure}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-5 sm:px-7 py-2 sm:py-3 border-2 border-blue-900 text-blue-900 rounded-lg shadow-lg hover:bg-blue-900 hover:text-white transition transform hover:scale-105 text-sm sm:text-base text-center"
+          >
+            View Company Profile
+          </a>
+        </div>
         </div>
       </motion.section>
 
-      {/* About Us Carousel */}
-      <motion.section
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="py-16 bg-gray-100 rounded-lg shadow-md my-12"
-      >
-        <div className="flex flex-col md:flex-row items-center gap-10 px-6 md:px-12">
-
-          {/* Text */}
+      {/* ---------------- ABOUT US CAROUSEL ---------------- */}
+      <motion.section className="py-16 bg-gray-100 rounded-lg shadow-md my-14">
+        <div className="flex flex-col md:flex-row gap-10 px-6 md:px-12">
           <div className="md:w-1/2">
-            <h2 className="text-3xl font-bold mb-6 text-blue-900">About Us</h2>
-            <p className="text-base md:text-lg text-gray-700 leading-relaxed mb-6">
-              MAS Art & General Supplies is a dynamic and forward-thinking company providing complete business solutions. Our services include office and school stationery, ICT support and equipment, electronics including laptops, printing, branding, advertising, and graphic design.
+            <h2 className="text-3xl font-bold text-blue-900 mb-6">About Us</h2>
+
+            <p
+              className={`text-base md:text-lg text-gray-700 leading-relaxed mb-6 ${
+                !showMore ? "line-clamp-4 sm:line-clamp-none" : ""
+              }`}
+            >
+              MAS Art & General Supplies is a dynamic and forward-thinking company
+              providing complete business solutions. Our services include office and
+              school stationery, ICT support services, ICT equipment and electronics
+              including laptops, printing, branding, advertising, and graphic design.
             </p>
-            <p className="text-base md:text-lg text-gray-700 leading-relaxed">
-              We are driven by quality, professionalism, and customer satisfaction. MAS Art & General Supplies is registered under the Malawi Business Registration Act (No. 12 of 2012) and recognized by the Government of Malawi.
+
+            <p
+              className={`text-base md:text-lg text-gray-700 leading-relaxed ${
+                !showMore ? "line-clamp-4 sm:line-clamp-none" : ""
+              }`}
+            >
+              We are driven by quality, professionalism, and customer satisfaction.
+              MAS Art & General Supplies is registered under the Malawi Business
+              Registration Act (No. 12 of 2012) and is officially recognized by the
+              Government of Malawi.
             </p>
+
+            {/* Read More button only on small screens */}
+            <button
+              className="sm:hidden mt-2 text-blue-900 font-semibold"
+              onClick={() => setShowMore(!showMore)}
+            >
+              {showMore ? "Read Less" : "Read More"}
+            </button>
           </div>
 
           {/* Carousel */}
-          <div
-            {...bind()}
-            className="md:w-1/2 relative w-full h-80 rounded-lg overflow-hidden shadow-lg cursor-grab"
-          >
+          <div {...bind()} className="md:w-1/2 relative h-80 rounded-lg overflow-hidden">
             <AnimatePresence mode="wait">
               <motion.img
                 key={slide}
-                src={aboutImages[slide]}
-                alt="About MAS"
-                initial={{ x: 300, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -300, opacity: 0 }}
-                transition={{ duration: 0.5 }}
+                src={aboutImages[slide].src}
+                alt={aboutImages[slide].alt}
                 className="w-full h-full object-cover"
+                initial={{ opacity: 0, x: 100 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -100 }}
               />
             </AnimatePresence>
 
+            {/* Prev / Next buttons */}
             <button
-              onClick={prevSlide}
+              onClick={() => setSlide((s) => (s === 0 ? aboutImages.length - 1 : s - 1))}
               className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/80 px-3 py-2 rounded-full"
             >
               ‹
             </button>
             <button
-              onClick={nextSlide}
+              onClick={() => setSlide((s) => (s + 1) % aboutImages.length)}
               className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/80 px-3 py-2 rounded-full"
             >
               ›
             </button>
+
+            {/* Pagination Dots */}
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex space-x-2">
+              {aboutImages.map((_, idx) => (
+                <span
+                  key={idx}
+                  className={`w-3 h-3 rounded-full ${
+                    slide === idx ? "bg-blue-900" : "bg-gray-400"
+                  }`}
+                />
+              ))}
+            </div>
           </div>
+        </div>
+
+        {/* Certification Badges */}
+        <div className="flex justify-center gap-6 mt-8 flex-wrap">
+          {certificationBadges.map((badge, idx) => (
+            <img
+              key={idx}
+              src={badge.src}
+              alt={badge.alt}
+              className="h-16 w-auto object-contain"
+            />
+          ))}
         </div>
       </motion.section>
 
-      {/* Mission, Vision, Values */}
+      {/* ---------------- MISSION / VISION ---------------- */}
       <section className="py-16">
-        <SectionHeading>Mission, Vision, Values</SectionHeading>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {missionAndVision.map((item, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="bg-white rounded shadow hover:shadow-lg overflow-hidden transform transition duration-500 hover:scale-105 cursor-pointer"
+        <SectionHeading>Mission, Vision & Values</SectionHeading>
+        <div className="grid md:grid-cols-3 gap-6">
+          {missionAndVision.map((item, i) => (
+            <div
+              key={i}
+              className="bg-white rounded shadow hover:scale-105 transition"
             >
-              <img src={item.img} alt={item.title} className="w-full h-48 object-cover" />
+              <img
+                src={item.img}
+                alt={item.title}
+                className="h-48 w-full object-cover"
+              />
               <div className="p-4">
-                <h3 className="font-semibold mb-2">{item.title}</h3>
-                <p className="text-gray-700 text-sm">{item.description}</p>
+                <h3 className="font-bold mb-2">{item.title}</h3>
+                <p className="text-sm text-gray-700">{item.description}</p>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </section>
 
-      {/* Why Choose Us */}
+      {/* ---------------- WHY CHOOSE US ---------------- */}
       <section className="py-16">
         <SectionHeading>Why Choose Us</SectionHeading>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-          {whyChooseUs.map((item, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.1 }}
-              className="bg-blue-900 text-white p-6 rounded-lg text-center transform transition duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer"
+        <div className="grid md:grid-cols-5 gap-6">
+          {whyChooseUs.map((item, i) => (
+            <div
+              key={i}
+              className="bg-blue-900 text-white p-6 rounded-lg hover:scale-105 transition"
             >
-              <h3 className="font-semibold text-xl mb-2">{item.title}</h3>
-              <p className="text-sm opacity-90">{item.text}</p>
-            </motion.div>
+              <h3 className="font-bold mb-2">{item.title}</h3>
+              <p className="text-sm">{item.text}</p>
+            </div>
           ))}
         </div>
       </section>
 
-      {/* Latest Projects */}
+      {/* ---------------- PROJECTS ---------------- */}
       <LatestProjects projects={latestProjects} />
 
-      {/* Testimonials */}
+      {/* ---------------- TESTIMONIALS ---------------- */}
       <Testimonials testimonials={testimonials} />
 
-      {/* CTA */}
+      {/* ---------------- CTA ---------------- */}
       <section className="bg-blue-900 text-white py-16 text-center rounded-lg my-10">
         <h2 className="text-3xl font-bold mb-4">Let's Work Together</h2>
         <p className="mb-6">Have a project? Let us help bring it to life.</p>
         <button
           onClick={() => navigate("/contact")}
-          className="px-8 py-3 bg-white text-blue-900 font-semibold rounded-lg hover:scale-105 transition transform"
+          className="px-8 py-3 bg-white text-blue-900 font-semibold rounded-lg hover:scale-105 transition"
         >
           Contact Us
         </button>
