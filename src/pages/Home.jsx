@@ -15,6 +15,8 @@ import iboutImage1 from "../assets/iboutImage1.jpg";
 import iboutImage2 from "../assets/iboutImage2.png";
 import iboutImage3 from "../assets/iboutImage3.png";
 import iboutImage4 from "../assets/iboutImage4.png";
+import boy from "../assets/boy.png";
+import girl from "../assets/girl.png";
 import badge1 from "../assets/badge1.png";
 import badge2 from "../assets/badge2.png";
 import badge3 from "../assets/badge3.png";
@@ -95,27 +97,27 @@ export default function Home() {
     {
       name: "Jeremy Namwali",
       feedback: "MAS delivered exactly what we needed. Professional and creative!",
-      img: iboutImage,
+      img: boy,
     },
     {
       name: "Pauren Nyasoko",
       feedback: "Their printing and branding exceeded our expectations.",
-      img: iboutImage1,
+      img: girl,
     },
     {
       name: "Mr Mwale",
       feedback: "Great customer service and attention to detail.",
-      img: iboutImage2,
+      img: boy,
     },
     {
       name: "Anna Chirwa",
       feedback: "Outstanding quality and timely delivery.",
-      img: iboutImage3,
+      img: girl,
     },
     {
       name: "James Banda",
       feedback: "Highly recommend MAS for creative services.",
-      img: iboutImage4,
+      img: boy,
     },
   ];
 

@@ -426,7 +426,9 @@ export default function BusinessPlanForm() {
         {/* GRAPHIC DESIGN */}
         {formData.serviceType === "graphicDesign" && (
           <div className="border rounded p-4 space-y-3">
-            <h3 className="font-bold text-lg">Graphic Design</h3>
+            <h2 className="font-bold text-lg">Graphic Design</h2>
+             <h3 className="text-lg">Please choose whether you want us to prepare a Business Plan or a Business Profile.</h3>
+
 
             <div className="grid grid-cols-2 gap-2">
               {[
@@ -440,6 +442,8 @@ export default function BusinessPlanForm() {
                 "Poster/Banner",
                 "Program",
                 "Signage",
+                "Infographics",
+                "Business Card",
               ].map((item) => (
                 <label key={item} className="flex gap-2">
                   <input

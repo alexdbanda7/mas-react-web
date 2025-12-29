@@ -103,7 +103,7 @@ export default function Gallery() {
 
             {/* ID, Title, Description */}
             <div className="mt-4 text-center text-white px-4">
-              <p className="font-bold text-lg">ID: {galleryImages[activeIndex].id}</p>
+              {/* <p className="font-bold text-lg">ID: {galleryImages[activeIndex].id}</p> */}
               <p className="font-semibold text-xl mt-1">{galleryImages[activeIndex].title}</p>
               <p className="mt-2 text-sm sm:text-base">{galleryImages[activeIndex].description}</p>
             </div>

@@ -25,7 +25,7 @@ export default function Testimonials({ testimonials }) {
   const animationRef = useRef(null);
   const [isHovering, setIsHovering] = useState(false);
 
-  const SPEED = 0.4; // 🔧 Adjust speed here (0.2 = slow, 1 = fast)
+  const SPEED = 0.5; // 🔧 Adjust speed here (0.2 = slow, 1 = fast)
 
   useEffect(() => {
     const track = trackRef.current;
