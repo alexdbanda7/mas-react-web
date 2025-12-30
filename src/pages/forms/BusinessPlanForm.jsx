@@ -6,6 +6,20 @@ const SERVICE_ID = "service_6aortmj"; // your SMTP service
 const TEMPLATE_ID = "template_hnf1p28"; // 🔴 REPLACE with real template ID
 const PUBLIC_KEY = "DM_12DqWUPEMSUyxU";
 
+/* ================= TOOLTIP ================= */
+// const Tooltip = ({ text }) => (
+//   <span
+//     className="relative group ml-1 cursor-pointer text-gray-500"
+//     aria-label={text}
+//     role="tooltip"
+//   >
+//     ℹ️
+//     <span className="absolute z-10 hidden group-hover:block w-60 p-2 text-xs text-white bg-gray-800 rounded shadow-lg -top-2 left-6">
+//       {text}
+//     </span>
+//   </span>
+// );
+
 export default function BusinessPlanForm() {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
@@ -242,7 +256,7 @@ export default function BusinessPlanForm() {
           <option value="">Select Service Type</option>
           <option value="business">Business Plan / Profile</option>
           <option value="graphicDesign">Graphic Design</option>
-          <option value="ictTraining">ICT Training</option>
+          <option value="ictTraining">ICT Support or Training</option>
           <option value="computerRepair">Computer Repair</option>
           <option value="other">Other Services</option>
         </select>
@@ -425,46 +439,58 @@ export default function BusinessPlanForm() {
 
         {/* GRAPHIC DESIGN */}
         {formData.serviceType === "graphicDesign" && (
-          <div className="border rounded p-4 space-y-3">
+          <div className="border rounded p-4 space-y-4">
             <h2 className="font-bold text-lg">Graphic Design</h2>
-             <h3 className="text-lg">Please choose whether you want us to prepare a Business Plan or a Business Profile.</h3>
 
+            <p className="text-sm text-gray-600">
+              Please select the type of design you need. Select all that apply. If printing
+              is required, tick the checkbox below and complete the printing details.
+            </p>
 
-            <div className="grid grid-cols-2 gap-2">
-              {[
-                "Ad",
-                "Logo",
-                "Newsletter",
-                "Brochure",
-                "Booklet",
-                "Flier",
-                "Invitation/Reply/Envelope Set",
-                "Poster/Banner",
-                "Program",
-                "Signage",
-                "Infographics",
-                "Business Card",
-              ].map((item) => (
-                <label key={item} className="flex gap-2">
-                  <input
-                    type="checkbox"
-                    checked={(formData.designItems || []).includes(item)}
-                    onChange={() => handleCheckboxChange(item)}
-                  />
-                  {item}
-                </label>
-              ))}
+            {/* DESIGN TYPE CHECKLIST */}
+            <div>
+              <p className="font-medium mb-2">Design Type</p>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  "Ad",
+                  "Logo",
+                  "Newsletter",
+                  "Brochure",
+                  "Booklet",
+                  "Flyer",
+                  "Invitation/Reply/Envelope Set",
+                  "Poster/Banner",
+                  "Program",
+                  "Signage",
+                  "Infographics",
+                  "Business Cards",
+                ].map((item) => (
+                  <label key={item} className="flex items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={(formData.designItems || []).includes(item)}
+                      onChange={() => handleCheckboxChange(item)}
+                    />
+                    {item}
+                  </label>
+                ))}
+              </div>
             </div>
 
-            <input
-              name="designOther"
-              placeholder="Other (Specify)"
-              value={formData.designOther || ""}
-              onChange={handleChange}
-              className="w-full border px-3 py-2 rounded"
-            />
+            {/* OTHER */}
+            <div>
+              <label className="text-sm font-medium">Other</label>
+              <input
+                name="designOther"
+                placeholder="Specify another design type"
+                value={formData.designOther || ""}
+                onChange={handleChange}
+                className="w-full border px-3 py-2 rounded mt-1"
+              />
+            </div>
 
-            <label className="flex items-center gap-2 mt-2">
+            {/* PRINTING REQUIRED */}
+            <label className="flex items-center gap-2 mt-2 font-medium">
               <input
                 type="checkbox"
                 checked={formData.printingRequired || false}
@@ -478,107 +504,260 @@ export default function BusinessPlanForm() {
               Printing Required
             </label>
 
+            {/* PRINTING DETAILS */}
             {formData.printingRequired && (
-              <div className="border rounded p-3 space-y-2 mt-2">
+              <div className="border rounded p-3 space-y-3 mt-2 bg-gray-50">
                 <h4 className="font-semibold">Printing Details</h4>
-                <input
-                  name="printQuantity"
-                  type="number"
-                  placeholder="Quantity"
-                  value={formData.printQuantity || ""}
-                  onChange={handleChange}
-                  className="w-full border px-3 py-2 rounded"
-                />
-                <input
-                  name="printSize"
-                  placeholder="Size"
-                  value={formData.printSize || ""}
-                  onChange={handleChange}
-                  className="w-full border px-3 py-2 rounded"
-                />
-                <select
-                  name="printPaper"
-                  value={formData.printPaper || ""}
-                  onChange={handleChange}
-                  className="w-full border px-3 py-2 rounded"
-                >
-                  <option value="">Paper</option>
-                  <option value="matte">Matte</option>
-                  <option value="gloss">Gloss</option>
-                </select>
-                <select
-                  name="printColor"
-                  value={formData.printColor || ""}
-                  onChange={handleChange}
-                  className="w-full border px-3 py-2 rounded"
-                >
-                  <option value="">Color</option>
-                  <option value="full">Full Color</option>
-                  <option value="bw">Black & White</option>
-                </select>
-                <input
-                  type="date"
-                  name="expectedDelivery"
-                  placeholder="Expected Delivery Date"
-                  value={formData.expectedDelivery || ""}
-                  onChange={handleChange}
-                  className="w-full border px-3 py-2 rounded"
-                />
+
+                <div>
+                  <label className="text-sm font-medium">Quantity *</label>
+                  <input
+                    name="printQuantity"
+                    type="number"
+                    value={formData.printQuantity || ""}
+                    onChange={handleChange}
+                    className="w-full border px-3 py-2 rounded mt-1"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">Size</label>
+                  <input
+                    name="printSize"
+                    placeholder="e.g. A4, 8.5 x 11"
+                    value={formData.printSize || ""}
+                    onChange={handleChange}
+                    className="w-full border px-3 py-2 rounded mt-1"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">Paper Type</label>
+                  <select
+                    name="printPaper"
+                    value={formData.printPaper || ""}
+                    onChange={handleChange}
+                    className="w-full border px-3 py-2 rounded mt-1"
+                  >
+                    <option value="">Select paper type</option>
+                    <option value="matte">Matte</option>
+                    <option value="gloss">Gloss</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">Color</label>
+                  <select
+                    name="printColor"
+                    value={formData.printColor || ""}
+                    onChange={handleChange}
+                    className="w-full border px-3 py-2 rounded mt-1"
+                  >
+                    <option value="">Select color option</option>
+                    <option value="full">Full Color</option>
+                    <option value="bw">Black & White</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">Needed By *</label>
+                  <input
+                    type="date"
+                    name="expectedDelivery"
+                    value={formData.expectedDelivery || ""}
+                    onChange={handleChange}
+                    className="w-full border px-3 py-2 rounded mt-1"
+                  />
+                </div>
               </div>
             )}
 
-            <textarea
-              name="designNotes"
-              placeholder="Extra Notes"
-              value={formData.designNotes || ""}
-              onChange={handleChange}
-              className="w-full border px-3 py-2 rounded"
-            />
+            {/* NOTES */}
+            <div>
+              <label className="text-sm font-medium">Extra Notes</label>
+              <textarea
+                name="designNotes"
+                placeholder="Include deadlines, special instructions, or references"
+                value={formData.designNotes || ""}
+                onChange={handleChange}
+                className="w-full border px-3 py-2 rounded mt-1"
+              />
+            </div>
 
-            <input
-              type="file"
-              name="designFile"
-              accept=".jpg,.jpeg,.png,.pdf"
-              onChange={handleFileChange}
-            />
+            {/* FILE UPLOAD */}
+            <div>
+              <label className="text-sm font-medium">Attach files if you already have artwork, need printing only, or want to share a sketch or concept(optional)</label>
+              <input
+                type="file"
+                name="designFile"
+                accept=".jpg,.jpeg,.png,.pdf"
+                onChange={handleFileChange}
+                className="mt-1"
+              />
+            </div>
           </div>
         )}
 
-        {/* ICT TRAINING */}
-        {formData.serviceType === "ictTraining" && (
-          <div className="border rounded p-4 space-y-3">
-            <h3 className="font-bold text-lg">ICT Training</h3>
+{/* ICT SUPPORT / TRAINING */}
+{formData.serviceType === "ictTraining" && (
+  <div className="border rounded p-4 space-y-4">
+    <h3 className="font-bold text-lg">ICT Support or Training</h3>
 
-            <input
-              name="trainingType"
-              placeholder="Training Type"
-              value={formData.trainingType || ""}
-              onChange={handleChange}
-              className="w-full border px-3 py-2 rounded"
-            />
-            <input
-              name="trainingDuration"
-              placeholder="Duration"
-              value={formData.trainingDuration || ""}
-              onChange={handleChange}
-              className="w-full border px-3 py-2 rounded"
-            />
-            <input
-              name="trainingLocation"
-              placeholder="Location"
-              value={formData.trainingLocation || ""}
-              onChange={handleChange}
-              className="w-full border px-3 py-2 rounded"
-            />
-            <textarea
-              name="trainingNotes"
-              placeholder="Notes"
-              value={formData.trainingNotes || ""}
-              onChange={handleChange}
-              className="w-full border px-3 py-2 rounded"
-            />
+    <p className="text-sm text-gray-600">
+      Please select the type of ICT service you need so we can gather the right
+      information.
+    </p>
+
+    {/* SERVICE SELECTION */}
+    <div>
+      <label className="font-medium block mb-2">
+        Service Type <span className="text-red-500">*</span>
+      </label>
+      <div className="flex gap-6">
+        <label className="flex items-center gap-2">
+          <input
+            type="radio"
+            name="ictServiceType"
+            value="support"
+            checked={formData.ictServiceType === "support"}
+            onChange={handleChange}
+          />
+          ICT Support
+        </label>
+
+        <label className="flex items-center gap-2">
+          <input
+            type="radio"
+            name="ictServiceType"
+            value="training"
+            checked={formData.ictServiceType === "training"}
+            onChange={handleChange}
+          />
+          ICT Training
+        </label>
+      </div>
+    </div>
+
+    {/* ICT SUPPORT FORM */}
+    {formData.ictServiceType === "support" && (
+      <div className="border rounded p-3 space-y-3 bg-gray-50">
+        <h4 className="font-semibold">ICT Support Details</h4>
+
+        <div>
+          <label className="text-sm font-medium">
+            Type of Issue <span className="text-red-500">*</span>
+          </label>
+          <input
+            name="supportIssueType"
+            placeholder="e.g. Network, Hardware, Software"
+            value={formData.supportIssueType || ""}
+            onChange={handleChange}
+            className="w-full border px-3 py-2 rounded mt-1"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="text-sm font-medium">
+            Urgency Level <span className="text-red-500">*</span>
+          </label>
+          <select
+            name="supportUrgency"
+            value={formData.supportUrgency || ""}
+            onChange={handleChange}
+            className="w-full border px-3 py-2 rounded mt-1"
+            required
+          >
+            <option value="">Select urgency</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="text-sm font-medium">Location</label>
+          <input
+            name="supportLocation"
+            placeholder="On-site or Remote"
+            value={formData.supportLocation || ""}
+            onChange={handleChange}
+            className="w-full border px-3 py-2 rounded mt-1"
+          />
+        </div>
+
+        <div>
+          <label className="text-sm font-medium">Issue Description</label>
+          <textarea
+            name="supportNotes"
+            placeholder="Describe the issue in detail"
+            value={formData.supportNotes || ""}
+            onChange={handleChange}
+            className="w-full border px-3 py-2 rounded mt-1"
+          />
+        </div>
+      </div>
+    )}
+
+            {/* ICT TRAINING FORM */}
+            {formData.ictServiceType === "training" && (
+              <div className="border rounded p-3 space-y-3 bg-gray-50">
+                <h4 className="font-semibold">ICT Training Details</h4>
+
+                <div>
+                  <label className="text-sm font-medium">
+                    Training Topic <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    name="trainingTopic"
+                    placeholder="e.g. Microsoft Excel, Cybersecurity, Basic Computing"
+                    value={formData.trainingTopic || ""}
+                    onChange={handleChange}
+                    className="w-full border px-3 py-2 rounded mt-1"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">
+                    Duration <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    name="trainingDuration"
+                    placeholder="e.g. 2 hours, 1 day, 1 week"
+                    value={formData.trainingDuration || ""}
+                    onChange={handleChange}
+                    className="w-full border px-3 py-2 rounded mt-1"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">Preferred Location</label>
+                  <input
+                    name="trainingLocation"
+                    placeholder="On-site or Online"
+                    value={formData.trainingLocation || ""}
+                    onChange={handleChange}
+                    className="w-full border px-3 py-2 rounded mt-1"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">Additional Notes</label>
+                  <textarea
+                    name="trainingNotes"
+                    placeholder="Number of participants, skill level, goals"
+                    value={formData.trainingNotes || ""}
+                    onChange={handleChange}
+                    className="w-full border px-3 py-2 rounded mt-1"
+                  />
+                </div>
+              </div>
+            )}
           </div>
         )}
+
 
         {/* COMPUTER REPAIR */}
         {formData.serviceType === "computerRepair" && (
