@@ -11,10 +11,12 @@ import valuesImg from "../assets/values.jpg";
 import missionImg from "../assets/mission.png";
 import visionImg from "../assets/vision.png";
 import iboutImage from "../assets/iboutImage.jpeg";
-import iboutImage1 from "../assets/iboutImage1.jpg";
-import iboutImage2 from "../assets/iboutImage2.png";
+import iboutImage1 from "../assets/iboutImage1.jpeg";
+import iboutImage2 from "../assets/iboutImage2.jpg";
 import iboutImage3 from "../assets/iboutImage3.png";
 import iboutImage4 from "../assets/iboutImage4.png";
+import iboutImage5 from "../assets/iboutImage5.jpeg";
+import newYear from "../assets/newYear.jpg";
 import boy from "../assets/boy.png";
 import girl from "../assets/girl.png";
 import badge1 from "../assets/badge1.png";
@@ -54,10 +56,13 @@ export default function Home() {
     { src: iboutImage2, alt: "Creative design workflow" },
     { src: iboutImage3, alt: "Printing and branding setup" },
     { src: iboutImage4, alt: "Satisfied clients and staff" },
+    { src: iboutImage5, alt: "We are registered under mw-gov" },
+    { src: newYear, alt: "Happy New Year" },
   ];
 
   const [slide, setSlide] = useState(0);
-  const [showMore, setShowMore] = useState(false);
+  // eslint-disable-next-line no-empty-pattern
+  const [] = useState(false);
 
   /* Auto-slide every 5s */
   useEffect(() => {
@@ -207,36 +212,38 @@ export default function Home() {
           <div className="md:w-1/2">
             <h2 className="text-3xl font-bold text-blue-900 mb-6">About Us</h2>
 
-            <p
-              className={`text-base md:text-lg text-gray-700 leading-relaxed mb-6 ${
-                !showMore ? "line-clamp-4 sm:line-clamp-none" : ""
-              }`}
-            >
-              MAS Art & General Supplies is a dynamic and forward-thinking company
-              providing complete business solutions. Our services include office and
-              school stationery, ICT support services, ICT equipment and electronics
-              including laptops, printing, branding, advertising, and graphic design.
-            </p>
+              <p className="mt-6 text-lg text-gray-700 leading-relaxed max-w-xl">
+                We are a leading provider of office, ICT, and branding solutions to businesses, 
+                institutions, and individuals throughout Malawi. We are committed to excellence, professionalism, 
+                and delivering value-driven solutions that support long-term partnerships.
+              </p>
+              <p className="mt-6 text-lg text-gray-700 leading-relaxed max-w-xl">
+                The company is registered under the Malawi Business Registration Act (No. 12 of 2012) and is officially recognized by the Government of Malawi.
+              </p>
 
-            <p
-              className={`text-base md:text-lg text-gray-700 leading-relaxed ${
-                !showMore ? "line-clamp-4 sm:line-clamp-none" : ""
-              }`}
-            >
-              We are driven by quality, professionalism, and customer satisfaction.
-              MAS Art & General Supplies is registered under the Malawi Business
-              Registration Act (No. 12 of 2012) and is officially recognized by the
-              Government of Malawi.
-            </p>
+              {/* STATS */}
+                <div className="mt-10 grid grid-cols-3 gap-6 max-w-xl flex-grow border-t border-gray-300">
+                  <div>
+                    <h3 className="text-3xl font-bold text-blue-900">7+</h3>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Years of Experience
+                    </p>
+                  </div>
 
-            {/* Read More button only on small screens */}
-            <button
-              className="sm:hidden mt-2 text-blue-900 font-semibold"
-              onClick={() => setShowMore(!showMore)}
-            >
-              {showMore ? "Read Less" : "Read More"}
-            </button>
-          </div>
+                  <div>
+                    <h3 className="text-3xl font-bold text-blue-900">500+</h3>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Satisfied Clients
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="text-3xl font-bold text-blue-900">10+</h3>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Services Offered
+                    </p>
+                  </div>
+                </div>
+          </ div>
 
           {/* Carousel */}
           <div {...bind()} className="md:w-1/2 relative h-80 rounded-lg overflow-hidden">

@@ -49,7 +49,7 @@ export default function Testimonials({ testimonials }) {
 
   return (
     <section className="py-20 overflow-hidden">
-      <h2 className="text-3xl font-bold text-center text-blue-900 mb-10 ">
+      <h2 className="text-3xl font-bold text-center text-blue-900 mb-10 flex-grow border-t border-gray-300">
         What Our Clients Say
       </h2>
 
