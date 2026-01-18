@@ -4,9 +4,6 @@ import { useState, useEffect } from "react";
 import { useDrag } from "@use-gesture/react";
 
 import masLogo from "../maslogo.png";
-import projectOneImg from "../assets/project1.jpg";
-import projectTwoImg from "../assets/project2.jpg";
-import projectThreeImg from "../assets/project3.jpg";
 import valuesImg from "../assets/values.jpg";
 import missionImg from "../assets/mission.png";
 import visionImg from "../assets/vision.png";
@@ -17,8 +14,6 @@ import iboutImage3 from "../assets/iboutImage3.png";
 import iboutImage4 from "../assets/iboutImage4.png";
 import iboutImage5 from "../assets/iboutImage5.jpeg";
 import newYear from "../assets/newYear.jpg";
-import boy from "../assets/boy.png";
-import girl from "../assets/girl.png";
 import badge1 from "../assets/badge1.png";
 import badge2 from "../assets/badge2.png";
 import badge3 from "../assets/badge3.png";
@@ -61,8 +56,6 @@ export default function Home() {
   ];
 
   const [slide, setSlide] = useState(0);
-  // eslint-disable-next-line no-empty-pattern
-  const [] = useState(false);
 
   /* Auto-slide every 5s */
   useEffect(() => {
@@ -78,53 +71,6 @@ export default function Home() {
     if (swipeX === -1) setSlide((s) => (s + 1) % aboutImages.length);
     if (swipeX === 1) setSlide((s) => (s === 0 ? aboutImages.length - 1 : s - 1));
   });
-
-  /* -------- HERO DATA -------- */
-  const latestProjects = [
-    {
-      title: "Nyaso Foundation Branding",
-      img: projectOneImg,
-      description: "Branding and identity design completed in 2024.",
-    },
-    {
-      title: "Posiye Gardens Logo",
-      img: projectTwoImg,
-      description: "Creative logo design project in 2024.",
-    },
-    {
-      title: "Repose Healthcare UK",
-      img: projectThreeImg,
-      description: "High-quality printing solution delivered in 2025.",
-    },
-  ];
-
-  const testimonials = [
-    {
-      name: "Jeremy Namwali",
-      feedback: "MAS delivered exactly what we needed. Professional and creative!",
-      img: boy,
-    },
-    {
-      name: "Pauren Nyasoko",
-      feedback: "Their printing and branding exceeded our expectations.",
-      img: girl,
-    },
-    {
-      name: "Mr Mwale",
-      feedback: "Great customer service and attention to detail.",
-      img: boy,
-    },
-    {
-      name: "Anna Chirwa",
-      feedback: "Outstanding quality and timely delivery.",
-      img: girl,
-    },
-    {
-      name: "James Banda",
-      feedback: "Highly recommend MAS for creative services.",
-      img: boy,
-    },
-  ];
 
   /* -------- MISSION / VISION DATA -------- */
   const missionAndVision = [
@@ -187,22 +133,22 @@ export default function Home() {
           </p>
 
           <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
-          <button
-            onClick={() => navigate("/services")}
-            className="px-5 sm:px-7 py-2 sm:py-3 bg-blue-900 text-white rounded-lg shadow-lg hover:bg-blue-800 transition transform hover:scale-105 text-sm sm:text-base"
-          >
-            View Services
-          </button>
+            <button
+              onClick={() => navigate("/services")}
+              className="px-5 sm:px-7 py-2 sm:py-3 bg-blue-900 text-white rounded-lg shadow-lg hover:bg-blue-800 transition transform hover:scale-105 text-sm sm:text-base"
+            >
+              View Services
+            </button>
 
-          <a
-            href={brochure}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-5 sm:px-7 py-2 sm:py-3 border-2 border-blue-900 text-blue-900 rounded-lg shadow-lg hover:bg-blue-900 hover:text-white transition transform hover:scale-105 text-sm sm:text-base text-center"
-          >
-            View Company Profile
-          </a>
-        </div>
+            <a
+              href={brochure}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-5 sm:px-7 py-2 sm:py-3 border-2 border-blue-900 text-blue-900 rounded-lg shadow-lg hover:bg-blue-900 hover:text-white transition transform hover:scale-105 text-sm sm:text-base text-center"
+            >
+              View Company Profile
+            </a>
+          </div>
         </div>
       </motion.section>
 
@@ -212,38 +158,38 @@ export default function Home() {
           <div className="md:w-1/2">
             <h2 className="text-3xl font-bold text-blue-900 mb-6">About Us</h2>
 
-              <p className="mt-6 text-lg text-gray-700 leading-relaxed max-w-xl">
-                We are a leading provider of office, ICT, and branding solutions to businesses, 
-                institutions, and individuals throughout Malawi. We are committed to excellence, professionalism, 
-                and delivering value-driven solutions that support long-term partnerships.
-              </p>
-              <p className="mt-6 text-lg text-gray-700 leading-relaxed max-w-xl">
-                The company is registered under the Malawi Business Registration Act (No. 12 of 2012) and is officially recognized by the Government of Malawi.
-              </p>
+            <p className="mt-6 text-lg text-gray-700 leading-relaxed max-w-xl">
+              We are a leading provider of office, ICT, and branding solutions to businesses, 
+              institutions, and individuals throughout Malawi. We are committed to excellence, professionalism, 
+              and delivering value-driven solutions that support long-term partnerships.
+            </p>
+            <p className="mt-6 text-lg text-gray-700 leading-relaxed max-w-xl">
+              The company is registered under the Malawi Business Registration Act (No. 12 of 2012) and is officially recognized by the Government of Malawi.
+            </p>
 
-              {/* STATS */}
-                <div className="mt-10 grid grid-cols-3 gap-6 max-w-xl flex-grow border-t border-gray-300">
-                  <div>
-                    <h3 className="text-3xl font-bold text-blue-900">7+</h3>
-                    <p className="text-sm text-gray-600 mt-1">
-                      Years of Experience
-                    </p>
-                  </div>
+            {/* STATS */}
+            <div className="mt-10 grid grid-cols-3 gap-6 max-w-xl flex-grow border-t border-gray-300">
+              <div>
+                <h3 className="text-3xl font-bold text-blue-900">7+</h3>
+                <p className="text-sm text-gray-600 mt-1">
+                  Years of Experience
+                </p>
+              </div>
 
-                  <div>
-                    <h3 className="text-3xl font-bold text-blue-900">500+</h3>
-                    <p className="text-sm text-gray-600 mt-1">
-                      Satisfied Clients
-                    </p>
-                  </div>
-                  <div>
-                    <h3 className="text-3xl font-bold text-blue-900">10+</h3>
-                    <p className="text-sm text-gray-600 mt-1">
-                      Services Offered
-                    </p>
-                  </div>
-                </div>
-          </ div>
+              <div>
+                <h3 className="text-3xl font-bold text-blue-900">500+</h3>
+                <p className="text-sm text-gray-600 mt-1">
+                  Satisfied Clients
+                </p>
+              </div>
+              <div>
+                <h3 className="text-3xl font-bold text-blue-900">10+</h3>
+                <p className="text-sm text-gray-600 mt-1">
+                  Services Offered
+                </p>
+              </div>
+            </div>
+          </div>
 
           {/* Carousel */}
           <div {...bind()} className="md:w-1/2 relative h-80 rounded-lg overflow-hidden">
@@ -339,11 +285,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ---------------- PROJECTS ---------------- */}
-      <LatestProjects projects={latestProjects} />
+      {/* ---------------- PROJECTS (Dynamic) ---------------- */}
+      <LatestProjects />
 
-      {/* ---------------- TESTIMONIALS ---------------- */}
-      <Testimonials testimonials={testimonials} />
+      {/* ---------------- TESTIMONIALS (Dynamic) ---------------- */}
+      <Testimonials />
 
       {/* ---------------- CTA ---------------- */}
       <section className="bg-blue-900 text-white py-16 text-center rounded-lg my-10">
