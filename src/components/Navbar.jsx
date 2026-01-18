@@ -1,17 +1,17 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/mas_logo.png";
 
-// Import social media icons from src/assets
+// Import social media icons
 import facebookIcon from "../assets/facebook1.png";
-import twitterIcon from "../assets/x.png"; // X icon
+import twitterIcon from "../assets/x.png";
 import instagramIcon from "../assets/instagram.png";
 import linkedinIcon from "../assets/linkedinlogo.png";
 import tiktokIcon from "../assets/tiktok.png";
-// import githubIcon from "../assets/github.png";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const socialLinks = [
     { icon: facebookIcon, url: "https://www.facebook.com/share/14P7fxui499/", name: "Facebook" },
@@ -19,8 +19,20 @@ export default function Navbar() {
     { icon: instagramIcon, url: "https://www.instagram.com/alexd.banda7?igsh=cnY1M2JvZWthOXcz", name: "Instagram" },
     { icon: linkedinIcon, url: "https://linkedin.com/alexdbanda7", name: "LinkedIn" },
     { icon: tiktokIcon, url: "https://vm.tiktok.com/ZMH3GBTNUnVAy-mAeYb/", name: "TikTok" },
-    // { icon: githubIcon, url: "https://github.com/alexdbanda7", name: "GitHub" },
   ];
+
+  
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.ctrlKey && e.altKey && e.key.toLowerCase() === "a") {
+        e.preventDefault();
+        navigate("admin/login");
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [navigate]);
 
   return (
     <nav className="bg-gray-300 text-black py-4">
@@ -36,8 +48,6 @@ export default function Navbar() {
           <Link to="/services" className="nav-link">Services</Link>
           <Link to="/gallery" className="nav-link">Gallery</Link>
           <Link to="/contact" className="nav-link">Contact</Link>
-          
-          
 
           <div className="flex gap-4">
             {socialLinks.map((item, idx) => (
@@ -77,7 +87,6 @@ export default function Navbar() {
             <Link to="/services" className="nav-link" onClick={() => setIsOpen(false)}>Services</Link>
             <Link to="/contact" className="nav-link" onClick={() => setIsOpen(false)}>Contact</Link>
             <Link to="/gallery" className="nav-link" onClick={() => setIsOpen(false)}>Gallery</Link>
-
 
             <div className="flex gap-4 mt-2">
               {socialLinks.map((item, idx) => (

@@ -1,103 +1,72 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-
-// Icons
-import stationeryIcon from "../assets/stationery.png";
-import graphicDesignIcon from "../assets/graphic-design.png";
-import printingIcon from "../assets/printing.png";
-import brandingIcon from "../assets/branding.png";
-import ictTrainingIcon from "../assets/ict-training.png";
-import computerRepairIcon from "../assets/computer-repair.png";
-import otherServicesIcon from "../assets/other-services.png";
-
-const services = [
-  { 
-    id: "stationery-supplies", 
-    name: "Stationery & Office Supplies", 
-    icon: stationeryIcon, 
-    slogan: "Essential Supplies. Efficient Workspaces." 
-  },
-  { 
-    id: "graphic-design", 
-    name: "Graphic Design", 
-    icon: graphicDesignIcon, 
-    slogan: "Creative Designs That Communicate and Inspire." 
-  },
-  { 
-    id: "printing", 
-    name: "Printing Services", 
-    icon: printingIcon, 
-    slogan: "Precision Printing That Brings Ideas to Life." 
-  },
-  { 
-    id: "branding", 
-    name: "Branding & Advertising", 
-    icon: brandingIcon, 
-    slogan: "Build a Strong Brand. Leave a Lasting Impression." 
-  },
-  { 
-    id: "ict-training", 
-    name: "ICT Support & Training", 
-    icon: ictTrainingIcon, 
-    slogan: "Smart Technology Solutions for Modern Businesses." 
-  },
-  { 
-    id: "computer-repair", 
-    name: "Computer Repair & Maintenance", 
-    icon: computerRepairIcon, 
-    slogan: "Reliable Repairs. Maximum Performance." 
-  },
-  { 
-    id: "other-services", 
-    name: "Electronics & Other Services", 
-    icon: otherServicesIcon, 
-    slogan: "Flexible Solutions Tailored to Your Business Needs." 
-  },
-];
-
 
 export default function Services() {
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  return (
-    <div className="bg-gray-100 max-w-7xl mx-auto px-6 py-16">
-      <motion.h1
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
-        className="text-4xl sm:text-5xl font-bold text-center mb-6 text-black"
-      >
-        Our Main Services </motion.h1>
-      <div><p className="py-4 text-center">Reliable business solutions. Trusted technology. Professional results.</p></div>
+  useEffect(() => {
+    fetch("https://masartngs.com/api/fetch-services.php")
+      .then((res) => res.json())
+      .then((data) => {
+        setServices(Array.isArray(data) ? data : []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
-        {services.map((service, index) => (
-          <motion.div
-            key={service.id}
-            className="rounded-xl p-6 bg-gray-200 shadow-lg hover:shadow-xl transition cursor-pointer"
-            onClick={() => navigate(`/services/${service.id}`)}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: index * 0.1, duration: 0.4 }}
-            whileHover={{ y: -8 }}
-          >
-            <img src={service.icon} alt={service.name} className="w-28 h-28 mx-auto mb-4" />
-
-            <h2 className="text-xl font-bold text-center mb-2 text-black">{service.name}</h2>
-            <p className="text-sm font-semibold text-center text-black">{service.slogan}</p>
-
-            <button
-              className="mt-6 block mx-auto px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded transition"
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/services/${service.id}`);
-              }}
-            >
-              Learn More
-            </button>
-          </motion.div>
-        ))}
+  if (loading) {
+    return (
+      <div className="text-center py-20 font-semibold">
+        Loading services...
       </div>
-    </div>
+    );
+  }
+
+  return (
+    <section className="py-16 bg-gray-100">
+      <div className="max-w-7xl mx-auto px-4">
+
+        
+        <h2 className="text-4xl font-bold text-center text-gray-800 mb-2">
+          Our Main Services
+        </h2>
+
+        <p className="py-4 text-center text-gray-600 max-w-2xl mx-auto mb-12">
+          Reliable business solutions. Trusted technology. Professional results.
+        </p>
+
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {services.map((service) => (
+            <div
+              key={service.id}
+              className="bg-white rounded-xl shadow hover:shadow-lg transition p-6 text-center"
+            >
+              <img
+                src={`https://masartngs.com${service.icon}`}
+                alt={service.title}
+                className="w-16 h-16 mx-auto mb-4 object-contain"
+              />
+
+              <h3 className="text-xl font-semibold mb-2">
+                {service.title}
+              </h3>
+
+              <p className="text-gray-600 text-sm mb-4">
+                {service.description}
+              </p>
+
+              <button
+                onClick={() => navigate(`/services/${service.slug}`)}
+                className="mt-2 px-4 py-2 bg-blue-700 text-white text-sm rounded hover:bg-blue-800 transition"
+              >
+                Learn More
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }

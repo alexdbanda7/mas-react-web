@@ -1,7 +1,25 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
-/* ---------- Star Rating ---------- */
+/* ---------- SECTION HEADING ---------- */
+function SectionHeading({ children }) {
+  return (
+    <div className="relative flex items-center justify-center my-14">
+      <hr className="border-gray-300 w-1/4" />
+      <div className="flex space-x-2 mx-4">
+        {[...Array(4)].map((_, i) => (
+          <span key={i} className="w-3 h-3 rounded-full bg-blue-900" />
+        ))}
+      </div>
+      <h2 className="absolute bg-white px-4 text-xl md:text-3xl font-bold text-blue-900">
+        {children}
+      </h2>
+      <hr className="border-gray-300 w-1/4" />
+    </div>
+  );
+}
+
+/* ---------- STAR RATING ---------- */
 function StarRating({ count = 5 }) {
   return (
     <div className="flex justify-center mb-2">
@@ -19,17 +37,35 @@ function StarRating({ count = 5 }) {
   );
 }
 
-/* ---------- Testimonials ---------- */
-export default function Testimonials({ testimonials }) {
+/* ---------- TESTIMONIALS ---------- */
+export default function Testimonials() {
+  const [testimonials, setTestimonials] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const trackRef = useRef(null);
   const animationRef = useRef(null);
   const [isHovering, setIsHovering] = useState(false);
 
-  const SPEED = 0.5; // 🔧 Adjust speed here (0.2 = slow, 1 = fast)
+  const SPEED = 0.5;
 
+  /* ---- Fetch testimonials ---- */
+  useEffect(() => {
+    fetch("https://masartngs.com/api/testimonials/fetch-testimonials.php")
+      .then(res => res.json())
+      .then(data => {
+        setTestimonials(Array.isArray(data) ? data : []);
+      })
+      .catch(err => {
+        console.error("Error fetching testimonials:", err);
+        setTestimonials([]);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  /* ---- Auto-scroll animation ---- */
   useEffect(() => {
     const track = trackRef.current;
-    if (!track) return;
+    if (!track || testimonials.length === 0) return;
 
     let x = 0;
     const totalWidth = track.scrollWidth / 2;
@@ -45,53 +81,63 @@ export default function Testimonials({ testimonials }) {
 
     animate();
     return () => cancelAnimationFrame(animationRef.current);
-  }, [isHovering]);
+  }, [isHovering, testimonials]);
 
   return (
     <section className="py-20 overflow-hidden">
-      <h2 className="text-3xl font-bold text-center text-blue-900 mb-10 flex-grow border-t border-gray-300">
-        What Our Clients Say
-      </h2>
+      {/* ✅ HEADING ALWAYS VISIBLE */}
+      <SectionHeading>What Our Clients Say</SectionHeading>
 
-      <div
-        className="relative overflow-hidden"
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}
-      >
-        {/* Track */}
+      {/* 🔄 LOADING */}
+      {loading && (
+        <p className="text-center text-gray-500 py-8">
+          Loading testimonials...
+        </p>
+      )}
+
+      {/* ⚠️ EMPTY STATE */}
+      {!loading && testimonials.length === 0 && (
+        <p className="text-center text-gray-500 py-8 italic">
+          No testimonials available yet.
+        </p>
+      )}
+
+      {/* ✅ CAROUSEL */}
+      {!loading && testimonials.length > 0 && (
         <div
-          ref={trackRef}
-          className="flex gap-6 w-max"
+          className="relative overflow-hidden"
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
         >
-          {[...testimonials, ...testimonials].map((item, index) => (
-            <motion.div
-              key={index}
-              whileHover={{
-                scale: 1.08,
-                y: -8,
-              }}
-              transition={{ type: "spring", stiffness: 300 }}
-              className="min-w-[280px] max-w-[280px] bg-white rounded-xl p-6 shadow-md hover:shadow-2xl cursor-pointer"
-            >
-              <img
-                src={item.img}
-                alt={item.name}
-                className="w-20 h-20 mx-auto rounded-full object-cover mb-4 ring-4 ring-blue-100"
-              />
+          <div ref={trackRef} className="flex gap-6 w-max">
+            {[...testimonials, ...testimonials].map((item, index) => (
+              <motion.div
+                key={index}
+                whileHover={{ scale: 1.08, y: -8 }}
+                transition={{ type: "spring", stiffness: 300 }}
+                className="min-w-[280px] max-w-[280px] bg-white rounded-xl p-6 shadow-md hover:shadow-2xl cursor-pointer"
+              >
+                <img
+                  src={`https://masartngs.com${item.img}`}
+                  alt={item.name}
+                  className="w-20 h-20 mx-auto rounded-full object-cover mb-4 ring-4 ring-blue-100"
+                />
 
-              <StarRating />
+                <StarRating count={item.rating || 5} />
 
-              <p className="text-gray-700 text-sm text-center italic mb-3">
-                “{item.feedback}”
-              </p>
+                {/* ✅ FULL TEXT VISIBLE */}
+                <p className="text-gray-700 text-sm text-center italic mb-3 whitespace-normal break-words leading-relaxed">
+                  “{item.feedback}”
+                </p>
 
-              <h4 className="text-blue-900 font-semibold text-center">
-                {item.name}
-              </h4>
-            </motion.div>
-          ))}
+                <h4 className="text-blue-900 font-semibold text-center">
+                  {item.name}
+                </h4>
+              </motion.div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }
